@@ -1,0 +1,1964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodExpress - Fast Food Delivery</title>
+    <style>
+        :root {
+            --primary-color: #ff4757;
+            --primary-dark: #e84118;
+            --secondary-color: #2f3542;
+            --light-color: #f1f2f6;
+            --dark-color: #1e272e;
+            --success-color: #2ed573;
+            --warning-color: #ffa502;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: bold;
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--secondary-color);
+            font-weight: 600;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background: var(--primary-color);
+            bottom: -5px;
+            left: 0;
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.6rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            font-size: 0.9rem;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-login {
+            background-color: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-login:hover {
+            background-color: var(--primary-color);
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 71, 87, 0.3);
+        }
+
+        .btn-signup {
+            background-color: var(--primary-color);
+            color: #fff;
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-signup:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 71, 87, 0.3);
+        }
+
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #fff;
+            padding-top: 80px;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            padding: 2rem;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            letter-spacing: 1px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .search-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .location-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .location-btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            background-color: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+        }
+
+        .location-btn:hover {
+            background-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .search-bar {
+            display: flex;
+            background: #fff;
+            border-radius: 50px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .search-bar input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border: none;
+            outline: none;
+            font-size: 1rem;
+        }
+
+        .search-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0 1.5rem;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .search-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .features {
+            padding: 5rem 2rem;
+            background-color: #fff;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: var(--secondary-color);
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            width: 50%;
+            height: 4px;
+            background: var(--primary-color);
+            bottom: -10px;
+            left: 25%;
+            border-radius: 2px;
+        }
+
+        .features-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            padding: 2rem;
+            background: #f9f9f9;
+            border-radius: 10px;
+            text-align: center;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid #eee;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary-color);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--secondary-color);
+        }
+
+        .feature-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .how-it-works {
+            background-color: #f9f9f9;
+            padding: 5rem 2rem;
+        }
+
+        .steps-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .step {
+            flex: 1;
+            min-width: 250px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+        }
+
+        .step:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+        }
+
+        .step h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--secondary-color);
+        }
+
+        .step p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .popular-restaurants {
+            padding: 5rem 2rem;
+            background-color: #fff;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto 3rem;
+        }
+
+        .view-all {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .view-all:hover {
+            transform: translateX(5px);
+        }
+
+        .restaurants-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .restaurant-card {
+            background: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+            border: 1px solid #eee;
+        }
+
+        .restaurant-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary-color);
+        }
+
+        .restaurant-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .restaurant-card:hover .restaurant-img {
+            transform: scale(1.05);
+        }
+
+        .restaurant-info {
+            padding: 1.5rem;
+        }
+
+        .restaurant-info h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--secondary-color);
+        }
+
+        .restaurant-info .cuisine {
+            color: #666;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .rating {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .delivery-info {
+            display: flex;
+            justify-content: space-between;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .delivery-time {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .delivery-fee {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .cta-section {
+            background: linear-gradient(135deg, #ff4757 0%, #ff6d3a 100%);
+            color: white;
+            padding: 4rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+        }
+        
+        .cta-content {
+            flex: 1;
+            z-index: 2;
+        }
+        
+        .cta-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+        
+        .cta-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            max-width: 600px;
+        }
+        
+        .cta-actions {
+            margin-bottom: 2rem;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .cta-primary {
+            background-color: white;
+            color: #ff4757;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .cta-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .cta-secondary {
+            background-color: transparent;
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .cta-secondary:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-color: white;
+            transform: translateY(-3px);
+        }
+        
+        .cta-app-download p {
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .app-badges {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .app-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            background-color: #2f3542;
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .app-badge:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .badge-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+        
+        .badge-text span:first-child {
+            font-size: 0.7rem;
+        }
+        
+        .badge-text span:last-child {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        
+        .cta-features {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            min-width: 150px;
+            transition: all 0.3s;
+        }
+        
+        .feature-card:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-5px);
+        }
+        
+        .feature-card i {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+        
+        .feature-card h4 {
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .feature-card p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .cta-image {
+            flex: 1;
+            z-index: 1;
+            position: relative;
+        }
+        
+        .cta-image img {
+            width: 100%;
+            max-width: 500px;
+            border-radius: 10px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .chatbot-widget {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .chatbot-button {
+            width: 60px;
+            height: 60px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(255, 71, 87, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 71, 87, 0); }
+        }
+
+        .chatbot-button:hover {
+            transform: scale(1.1);
+            background-color: var(--primary-dark);
+        }
+
+        .chatbot-icon {
+            color: #fff;
+            font-size: 1.8rem;
+        }
+
+        .chatbot-window {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 350px;
+            height: 450px;
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.2);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 1001;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.3s;
+        }
+
+        .chatbot-window.active {
+            display: flex;
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .chatbot-header {
+            background-color: var(--primary-color);
+            color: #fff;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .close-chat {
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .close-chat:hover {
+            transform: rotate(90deg);
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 0.8rem 1rem;
+            border-radius: 18px;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            position: relative;
+        }
+
+        .user-message {
+            align-self: flex-end;
+            background-color: var(--primary-color);
+            color: white;
+            border-bottom-right-radius: 5px;
+        }
+
+        .bot-message {
+            align-self: flex-start;
+            background-color: #f1f1f1;
+            color: #333;
+            border-bottom-left-radius: 5px;
+        }
+
+        .quick-replies {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .quick-reply {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .quick-reply:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 0.8rem;
+            border-top: 1px solid #eee;
+            background: #f9f9f9;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 0.8rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            outline: none;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .chat-input input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(255, 71, 87, 0.2);
+        }
+
+        .send-btn {
+            background: var(--primary-color);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            margin-left: 0.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .send-btn:hover {
+            background: var(--primary-dark);
+            transform: rotate(15deg);
+        }
+
+        /* Restaurant recommendations */
+        .recommendation-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-top: 0.5rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .recommendation-card h4 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .recommendation-card p {
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        .recommendation-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-size: 0.8rem;
+            color: var(--warning-color);
+        }
+
+        /* Loading animation */
+        .typing-indicator {
+            display: flex;
+            padding: 0.5rem;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #888;
+            border-radius: 50%;
+            margin: 0 2px;
+            animation: typingAnimation 1.4s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typingAnimation {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-5px); }
+        }
+
+        /* Location modal styles */
+        .location-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .location-modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
+            animation: modalFadeIn 0.3s ease-out;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .location-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .location-modal-header h3 {
+            color: var(--secondary-color);
+            font-size: 1.5rem;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+            transition: color 0.3s;
+        }
+
+        .close-modal:hover {
+            color: var(--primary-color);
+        }
+
+        .location-search {
+            display: flex;
+            margin-bottom: 1rem;
+        }
+
+        .location-search input {
+            flex: 1;
+            padding: 0.8rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px 0 0 5px;
+            outline: none;
+            font-size: 1rem;
+        }
+
+        .location-search button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0 1.5rem;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .location-search button:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .suggested-locations {
+            margin-top: 1rem;
+        }
+
+        .suggested-locations h4 {
+            color: #666;
+            margin-bottom: 0.8rem;
+            font-size: 0.9rem;
+        }
+
+        .location-item {
+            padding: 0.8rem;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .location-item:last-child {
+            border-bottom: none;
+        }
+
+        .location-item:hover {
+            background-color: #f9f9f9;
+        }
+
+        .location-item i {
+            color: var(--primary-color);
+        }
+
+        .location-item .location-text {
+            flex: 1;
+        }
+
+        .location-item .location-title {
+            font-weight: 600;
+            color: var(--secondary-color);
+        }
+
+        .location-item .location-address {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        /* Loading spinner */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Notification toast */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .toast.show {
+            opacity: 1;
+        }
+
+        .toast i {
+            color: var(--primary-color);
+        }
+
+        /* Map container */
+        .map-container {
+            height: 200px;
+            margin-top: 1rem;
+            border-radius: 5px;
+            overflow: hidden;
+            background-color: #eee;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #666;
+        }
+
+        .footer {
+            background-color: #333;
+            color: #fff;
+            padding: 3rem 2rem 0;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+            gap: 2rem;
+        }
+
+        .footer-section {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .footer-section h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: #ff4757;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 2px;
+            background: #ff4757;
+            bottom: 0;
+            left: 0;
+        }
+
+        .footer-section p {
+            margin-bottom: 1rem;
+            color: #ccc;
+            line-height: 1.6;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-links a {
+            color: #ccc;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-links a:hover {
+            color: #ff4757;
+            transform: translateX(5px);
+        }
+
+        .footer-links a i {
+            font-size: 0.8rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #444;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .social-icon:hover {
+            background-color: #ff4757;
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding: 1.5rem 0;
+            background-color: #222;
+            color: #999;
+            font-size: 0.9rem;
+            margin-top: 3rem;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .cta-container {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .cta-content {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .cta-buttons {
+                justify-content: center;
+            }
+            
+            .app-badges {
+                justify-content: center;
+            }
+            
+            .cta-features {
+                justify-content: center;
+            }
+            
+            .cta-image {
+                margin-top: 2rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .logo {
+                margin-bottom: 1rem;
+            }
+
+            .nav-links, .auth-buttons {
+                width: 100%;
+                justify-content: center;
+                margin-top: 0.5rem;
+                flex-wrap: wrap;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .location-buttons {
+                flex-direction: column;
+            }
+
+            .search-bar {
+                flex-direction: column;
+                border-radius: 10px;
+            }
+
+            .search-btn {
+                padding: 0.8rem;
+            }
+
+            .chatbot-window {
+                width: 90%;
+                right: 5%;
+                bottom: 80px;
+                height: 60vh;
+            }
+
+            .footer-section {
+                min-width: 100%;
+            }
+
+            .cta-title {
+                font-size: 2rem;
+            }
+            
+            .cta-subtitle {
+                font-size: 1rem;
+            }
+            
+            .cta-btn {
+                padding: 0.8rem 1.5rem;
+                font-size: 0.9rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .step {
+                min-width: 100%;
+            }
+
+            .restaurants-container {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .cta-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .app-badges {
+                flex-direction: column;
+            }
+            
+            .feature-card {
+                min-width: 100%;
+            }
+
+            .location-modal-content {
+                width: 95%;
+                padding: 1.5rem;
+            }
+            
+            .quick-replies {
+                justify-content: center;
+            }
+            
+            .quick-reply {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.7rem;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <a href="#" class="logo">
+            <i class="fas fa-utensils logo-icon"></i>
+            <span>FoodExpress</span>
+        </a>
+        <nav class="nav-links">
+            <a href="#">Home</a>
+            <a href="#restaurants">Restaurants</a>
+            <a href="#cuisines">Cuisines</a>
+            <a href="#about">About Us</a>
+        </nav>
+        <div class="auth-buttons">
+            <a href="/login" class="btn btn-login">Log In</a>
+            <a href="/login" class="btn btn-signup">Sign Up</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Delicious Food Delivered to Your Door</h1>
+            <p>Order from the best restaurants in your area with just a few clicks. Fast delivery, fresh food, and amazing variety await you!</p>
+            
+            <div class="search-container">
+                <div class="location-buttons">
+                    <button class="location-btn" id="current-location-btn">
+                        <i class="fas fa-location-arrow"></i> Use Current Location
+                    </button>
+                    <button class="location-btn" id="new-location-btn">
+                        <i class="fas fa-map-marker-alt"></i> New Location
+                    </button>
+                </div>
+                
+                <div class="search-bar">
+                    <input type="text" placeholder="Enter your delivery address" id="address-input">
+                    <button class="search-btn" id="find-food-btn">
+                        <i class="fas fa-search"></i> Find Food
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <h2 class="section-title">Why Choose Us?</h2>
+        <div class="features-container">
+            <div class="feature-card">
+                <i class="fas fa-clock feature-icon"></i>
+                <h3>Fast Delivery</h3>
+                <p>Get your food delivered within 30 minutes or get a discount on your next order. No wait, just great food.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-utensils feature-icon"></i>
+                <h3>Quality Food</h3>
+                <p>Partner with only the best restaurants in town. Quality ingredients and delicious flavors guaranteed.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-map-marker-alt feature-icon"></i>
+                <h3>Live Location Tracking</h3>
+                <p>Track your order in real-time and know exactly when your delicious meal will arrive at your doorstep.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-comments feature-icon"></i>
+                <h3>24/7 Support</h3>
+                <p>Our friendly support team and AI chatbot are available round the clock to assist you with any queries.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="how-it-works">
+        <h2 class="section-title">How It Works</h2>
+        <div class="steps-container">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3>Enter Your Location</h3>
+                <p>Share your location or enter your address to find restaurants delivering in your area.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3>Choose Your Restaurant</h3>
+                <p>Browse through a variety of restaurants and cuisines that deliver to your location.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3>Place Your Order</h3>
+                <p>Select your favorite dishes, customize as needed, and proceed to checkout.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <h3>Enjoy Your Meal</h3>
+                <p>Track your order in real-time and enjoy delicious food delivered right to your doorstep.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Popular Restaurants Section -->
+    <section class="popular-restaurants" id="restaurants">
+        <div class="section-header">
+            <h2 class="section-title">Popular Restaurants</h2>
+            <a href="#" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
+        </div>
+        <div class="restaurants-container">
+            <div class="restaurant-card">
+                <img src="https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&h=200&q=80" alt="Burger Kingdom" class="restaurant-img">
+                <div class="restaurant-info">
+                    <h3>Burger Kingdom</h3>
+                    <p class="cuisine">American, Fast Food</p>
+                    <div class="rating">
+                        <i class="fas fa-star"></i>
+                        <span>4.8 (500+ ratings)</span>
+                    </div>
+                    <div class="delivery-info">
+                        <span class="delivery-time"><i class="fas fa-clock"></i> 30-45 min</span>
+                        <span class="delivery-fee"><i class="fas fa-bicycle"></i> $0.99 delivery</span>
+                    </div>
+                </div>
+            </div>
+            <div class="restaurant-card">
+                <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&h=200&q=80" alt="Pizza Paradise" class="restaurant-img">
+                <div class="restaurant-info">
+                    <h3>Pizza Paradise</h3>
+                    <p class="cuisine">Italian, Pizza</p>
+                    <div class="rating">
+                        <i class="fas fa-star"></i>
+                        <span>4.6 (350+ ratings)</span>
+                    </div>
+                    <div class="delivery-info">
+                        <span class="delivery-time"><i class="fas fa-clock"></i> 20-35 min</span>
+                        <span class="delivery-fee"><i class="fas fa-bicycle"></i> $1.49 delivery</span>
+                    </div>
+                </div>
+            </div>
+            <div class="restaurant-card">
+                <img src="https://images.unsplash.com/photo-1579871494447-9811cf80d66c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&h=200&q=80" alt="Sushi Sensation" class="restaurant-img">
+                <div class="restaurant-info">
+                    <h3>Sushi Sensation</h3>
+                    <p class="cuisine">Japanese, Sushi</p>
+                    <div class="rating">
+                        <i class="fas fa-star"></i>
+                        <span>4.9 (200+ ratings)</span>
+                    </div>
+                    <div class="delivery-info">
+                        <span class="delivery-time"><i class="fas fa-clock"></i> 25-40 min</span>
+                        <span class="delivery-fee"><i class="fas fa-bicycle"></i> $1.99 delivery</span>
+                    </div>
+                </div>
+            </div>
+            <div class="restaurant-card">
+                <img src="https://images.unsplash.com/photo-1601050690597-df0568f70950?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&h=200&q=80" alt="Taco Fiesta" class="restaurant-img">
+                <div class="restaurant-info">
+                    <h3>Taco Fiesta</h3>
+                    <p class="cuisine">Mexican, Tacos</p>
+                    <div class="rating">
+                        <i class="fas fa-star"></i>
+                        <span>4.7 (320+ ratings)</span>
+                    </div>
+                    <div class="delivery-info">
+                        <span class="delivery-time"><i class="fas fa-clock"></i> 15-30 min</span>
+                        <span class="delivery-fee"><i class="fas fa-bicycle"></i> $0.49 delivery</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-container">
+            <div class="cta-content">
+                <h2 class="cta-title">Craving Delicious Food? We Deliver Happiness!</h2>
+                <p class="cta-subtitle">Get your favorite meals delivered in 30 minutes or less. Join thousands of satisfied customers today!</p>
+                
+                <div class="cta-actions">
+                    <div class="cta-buttons">
+                        <a href="/login" class="cta-btn cta-primary">
+                            <i class="fas fa-bolt"></i> Order Now
+                        </a>
+                        <a href="#restaurants" class="cta-btn cta-secondary">
+                            <i class="fas fa-utensils"></i> Browse Restaurants
+                        </a>
+                    </div>
+                    
+                    <div class="cta-app-download">
+                        <p>Download our app for faster ordering and exclusive deals:</p>
+                        <div class="app-badges">
+                            <a href="#" class="app-badge">
+                                <i class="fab fa-apple"></i>
+                                <div class="badge-text">
+                                    <span>Download on the</span>
+                                    <span>App Store</span>
+                                </div>
+                            </a>
+                            <a href="#" class="app-badge">
+                                <i class="fab fa-google-play"></i>
+                                <div class="badge-text">
+                                    <span>Get it on</span>
+                                    <span>Google Play</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="cta-features">
+                    <div class="feature-card">
+                        <i class="fas fa-clock"></i>
+                        <h4>Fast Delivery</h4>
+                        <p>30 min or free</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-shield-alt"></i>
+                        <h4>Secure Payment</h4>
+                        <p>100% protected</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-headset"></i>
+                        <h4>24/7 Support</h4>
+                        <p>Always available</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="cta-image">
+                <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80" alt="Delicious food delivery">
+            </div>
+        </div>
+    </section>
+
+    <!-- Location Modal -->
+    <div class="location-modal" id="location-modal">
+        <div class="location-modal-content">
+            <div class="location-modal-header">
+                <h3>Choose your location</h3>
+                <button class="close-modal" id="close-modal">&times;</button>
+            </div>
+            <div class="location-search">
+                <input type="text" placeholder="Search for area, street name..." id="location-search-input">
+                <button id="location-search-btn"><i class="fas fa-search"></i></button>
+            </div>
+            <div class="map-container" id="map-container">
+                <i class="fas fa-map-marker-alt"></i> Map will appear here
+            </div>
+            <div class="suggested-locations">
+                <h4>SUGGESTED LOCATIONS</h4>
+                <div class="location-item" data-location="Current Location">
+                    <i class="fas fa-location-arrow"></i>
+                    <div class="location-text">
+                        <div class="location-title">Current Location</div>
+                        <div class="location-address">Using GPS to find your position</div>
+                    </div>
+                </div>
+                <div class="location-item" data-location="Home">
+                    <i class="fas fa-home"></i>
+                    <div class="location-text">
+                        <div class="location-title">Home</div>
+                        <div class="location-address">123 Main Street, Apt 4B</div>
+                    </div>
+                </div>
+                <div class="location-item" data-location="Work">
+                    <i class="fas fa-briefcase"></i>
+                    <div class="location-text">
+                        <div class="location-title">Work</div>
+                        <div class="location-address">456 Business Avenue</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chatbot Widget -->
+    <div class="chatbot-widget">
+        <div class="chatbot-button" id="chatbot-toggle">
+            <i class="fas fa-comment-dots chatbot-icon"></i>
+        </div>
+        <div class="chatbot-window" id="chatbot-window">
+            <div class="chatbot-header">
+                <h3>FoodExpress Assistant</h3>
+                <button class="close-chat" id="close-chat">&times;</button>
+            </div>
+            <div class="chat-messages" id="chat-messages">
+                <!-- Chat messages will appear here -->
+            </div>
+            <div class="chat-input">
+                <input type="text" placeholder="Type your question here..." id="chat-input-field">
+                <button class="send-btn">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toast-message">Location updated successfully!</span>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>FoodExpress</h3>
+                <p>Delivering happiness with every order. Fast, reliable, and delicious food delivery service in your city.</p>
+                <div class="social-links">
+                    <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#restaurants">Restaurants</a></li>
+                    <li><a href="#cuisines">Cuisines</a></li>
+                    <li><a href="#about">About Us</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Customer Support</h3>
+                <ul class="footer-links">
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">Order Tracking</a></li>
+                    <li><a href="#">Feedback</a></li>
+                    <li><a href="#">Careers</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Info</h3>
+                <p><i class="fas fa-map-marker-alt"></i> 123 Food Street, Delivery City</p>
+                <p><i class="fas fa-phone"></i> +1 234 567 8900</p>
+                <p><i class="fas fa-envelope"></i> info@foodexpress.com</p>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2025 FoodExpress. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Chatbot functionality
+            const chatbotToggle = document.getElementById('chatbot-toggle');
+            const chatbotWindow = document.getElementById('chatbot-window');
+            const closeChat = document.getElementById('close-chat');
+            const chatMessages = document.getElementById('chat-messages');
+            const chatInputField = document.getElementById('chat-input-field');
+            const sendButton = document.querySelector('.send-btn');
+
+            // Location functionality
+            const currentLocationBtn = document.getElementById('current-location-btn');
+            const newLocationBtn = document.getElementById('new-location-btn');
+            const addressInput = document.getElementById('address-input');
+            const findFoodBtn = document.getElementById('find-food-btn');
+            const locationModal = document.getElementById('location-modal');
+            const closeModal = document.getElementById('close-modal');
+            const locationSearchInput = document.getElementById('location-search-input');
+            const locationSearchBtn = document.getElementById('location-search-btn');
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toast-message');
+
+            // Toggle chatbot window
+            chatbotToggle.addEventListener('click', function() {
+                chatbotWindow.classList.toggle('active');
+                if (chatbotWindow.classList.contains('active')) {
+                    // Add welcome message if chat is empty
+                    if (chatMessages.children.length === 0) {
+                        addBotMessage("Hello! I'm your FoodExpress assistant. How can I help you today?");
+                        
+                        // Add quick replies
+                        setTimeout(() => {
+                            const quickReplies = document.createElement('div');
+                            quickReplies.className = 'quick-replies';
+                            quickReplies.innerHTML = `
+                                <button class="quick-reply" data-message="Best restaurants near me">🍽️ Best Restaurants</button>
+                                <button class="quick-reply" data-message="What cuisines are available">🌍 Cuisines</button>
+                                <button class="quick-reply" data-message="How long is delivery">⏱️ Delivery Time</button>
+                                <button class="quick-reply" data-message="Any discounts available">💲 Discounts</button>
+                            `;
+                            chatMessages.appendChild(quickReplies);
+                            
+                            // Add event listeners to quick replies
+                            document.querySelectorAll('.quick-reply').forEach(button => {
+                                button.addEventListener('click', function() {
+                                    const message = this.getAttribute('data-message');
+                                    addUserMessage(message);
+                                    generateBotResponse(message);
+                                });
+                            });
+                        }, 500);
+                    }
+                }
+            });
+
+            // Close chatbot window
+            closeChat.addEventListener('click', function() {
+                chatbotWindow.classList.remove('active');
+            });
+
+            // Send message function
+            function sendMessage() {
+                const message = chatInputField.value.trim();
+                if (message) {
+                    addUserMessage(message);
+                    chatInputField.value = '';
+                    generateBotResponse(message);
+                }
+            }
+
+            // Generate bot response
+            function generateBotResponse(message) {
+                // Show typing indicator
+                const typingIndicator = document.createElement('div');
+                typingIndicator.className = 'typing-indicator bot-message';
+                typingIndicator.innerHTML = `
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                `;
+                chatMessages.appendChild(typingIndicator);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                // Simulate thinking time
+                setTimeout(() => {
+                    // Remove typing indicator
+                    chatMessages.removeChild(typingIndicator);
+                    
+                    let response;
+                    const messageLower = message.toLowerCase();
+                    
+                    if (messageLower.includes('restaurant') || messageLower.includes('food') || messageLower.includes('eat')) {
+                        if (messageLower.includes('best') || messageLower.includes('recommend') || messageLower.includes('near me')) {
+                            response = "Based on your location, here are some top-rated restaurants:";
+                            
+                            // Add restaurant recommendations
+                            addBotMessage(response);
+                            
+                            setTimeout(() => {
+                                const recommendations = document.createElement('div');
+                                recommendations.className = 'recommendation-card';
+                                recommendations.innerHTML = `
+                                    <h4>🍔 Burger Kingdom</h4>
+                                    <p>American fast food with delicious burgers and fries</p>
+                                    <div class="recommendation-rating">
+                                        <i class="fas fa-star"></i> 4.8 (500+ ratings) • $0.99 delivery
+                                    </div>
+                                `;
+                                chatMessages.appendChild(recommendations);
+                                
+                                const recommendations2 = document.createElement('div');
+                                recommendations2.className = 'recommendation-card';
+                                recommendations2.innerHTML = `
+                                    <h4>🍕 Pizza Paradise</h4>
+                                    <p>Authentic Italian pizza with fresh ingredients</p>
+                                    <div class="recommendation-rating">
+                                        <i class="fas fa-star"></i> 4.6 (350+ ratings) • $1.49 delivery
+                                    </div>
+                                `;
+                                chatMessages.appendChild(recommendations2);
+                                
+                                chatMessages.scrollTop = chatMessages.scrollHeight;
+                            }, 300);
+                            
+                            return;
+                        } else {
+                            response = "We have over 500 restaurants offering various cuisines! What type of food are you craving?";
+                        }
+                    } else if (messageLower.includes('cuisine') || messageLower.includes('type of food')) {
+                        response = "We offer a wide variety of cuisines including:\n- Italian 🍕\n- Mexican 🌮\n- Indian 🍛\n- Chinese 🥡\n- Japanese 🍣\n- American 🍔\n\nWhich one interests you?";
+                    } else if (messageLower.includes('deliver') && messageLower.includes('time')) {
+                        response = "Our average delivery time is 30-45 minutes, depending on your location and the restaurant's preparation time. During peak hours it might take up to 60 minutes.";
+                    } else if (messageLower.includes('discount') || messageLower.includes('offer') || messageLower.includes('coupon')) {
+                        response = "🎉 Special offers available!\n- NEW40: 40% off first order\n- FREEDEL: Free delivery on orders over $20\n- WEEKEND25: 25% off weekends\n\nEnter these codes at checkout!";
+                    } else if (messageLower.includes('location') || messageLower.includes('address')) {
+                        response = "We deliver to most areas in the city. You can change your delivery address by clicking the location button at the top of the page or asking me to help you find restaurants in a new area.";
+                    } else if (messageLower.includes('hi') || messageLower.includes('hello') || messageLower.includes('hey')) {
+                        response = "Hi there! 👋 I'm your FoodExpress assistant. I can help you find restaurants, check delivery times, or answer any questions about our service. What would you like to know?";
+                    } else if (messageLower.includes('thank')) {
+                        response = "You're welcome! 😊 Is there anything else I can help you with?";
+                    } else {
+                        response = "I'm here to help with your food delivery needs! You can ask me about:\n- Restaurants near you\n- Delivery times\n- Available cuisines\n- Special offers\n\nWhat would you like to know?";
+                    }
+                    
+                    addBotMessage(response);
+                    
+                    // Add quick replies for follow-up questions
+                    if (!messageLower.includes('hi') && !messageLower.includes('thank')) {
+                        setTimeout(() => {
+                            const quickReplies = document.createElement('div');
+                            quickReplies.className = 'quick-replies';
+                            quickReplies.innerHTML = `
+                                <button class="quick-reply" data-message="What's popular in my area">🔥 Popular Nearby</button>
+                                <button class="quick-reply" data-message="Any vegetarian options">🥗 Vegetarian</button>
+                                <button class="quick-reply" data-message="How do I track my order">📱 Order Tracking</button>
+                            `;
+                            chatMessages.appendChild(quickReplies);
+                            
+                            // Add event listeners to quick replies
+                            document.querySelectorAll('.quick-reply').forEach(button => {
+                                button.addEventListener('click', function() {
+                                    const message = this.getAttribute('data-message');
+                                    addUserMessage(message);
+                                    generateBotResponse(message);
+                                });
+                            });
+                            
+                            chatMessages.scrollTop = chatMessages.scrollHeight;
+                        }, 300);
+                    }
+                }, 1500);
+            }
+
+            // Add user message to chat
+            function addUserMessage(message) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'message user-message';
+                messageDiv.textContent = message;
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            // Add bot message to chat
+            function addBotMessage(message) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'message bot-message';
+                messageDiv.textContent = message;
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            // Send message on button click
+            sendButton.addEventListener('click', sendMessage);
+            
+            // Send message on Enter key
+            chatInputField.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+
+            // Location functionality
+            currentLocationBtn.addEventListener('click', function() {
+                this.innerHTML = '<span class="spinner"></span> Locating...';
+                
+                // Simulate geolocation API call
+                setTimeout(() => {
+                    this.innerHTML = '<i class="fas fa-check-circle"></i> Location Found';
+                    addressInput.value = "123 Current Location Street";
+                    showToast("Your current location has been set successfully");
+                    
+                    // Reset button after 2 seconds
+                    setTimeout(() => {
+                        this.innerHTML = '<i class="fas fa-location-arrow"></i> Use Current Location';
+                    }, 2000);
+                }, 1500);
+            });
+
+            newLocationBtn.addEventListener('click', function() {
+                locationModal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            });
+
+            closeModal.addEventListener('click', function() {
+                locationModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            });
+
+            // Close modal when clicking outside
+            locationModal.addEventListener('click', function(e) {
+                if (e.target === locationModal) {
+                    locationModal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+            });
+
+            // Location search functionality
+            locationSearchBtn.addEventListener('click', function() {
+                const query = locationSearchInput.value.trim();
+                if (query) {
+                    this.innerHTML = '<span class="spinner"></span>';
+                    
+                    // Simulate search API call
+                    setTimeout(() => {
+                        this.innerHTML = '<i class="fas fa-search"></i>';
+                        showToast(`Showing results for "${query}"`);
+                    }, 1000);
+                }
+            });
+
+            // Location item selection
+            document.querySelectorAll('.location-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const locationName = this.getAttribute('data-location');
+                    if (locationName === 'Current Location') {
+                        currentLocationBtn.click();
+                    } else {
+                        addressInput.value = this.querySelector('.location-address').textContent;
+                        showToast(`Delivery location set to ${locationName}`);
+                    }
+                    locationModal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                });
+            });
+
+            // Find food button
+            findFoodBtn.addEventListener('click', function() {
+                const address = addressInput.value.trim();
+                if (address) {
+                    this.innerHTML = '<span class="spinner"></span> Finding Restaurants...';
+                    
+                    // Simulate search
+                    setTimeout(() => {
+                        this.innerHTML = '<i class="fas fa-search"></i> Find Food';
+                        showToast(`Showing restaurants near ${address}`);
+                        
+                        // In a real app, this would load restaurants for the location
+                    }, 1500);
+                } else {
+                    showToast("Please enter a delivery address first");
+                }
+            });
+
+            // Show toast notification
+            function showToast(message) {
+                toastMessage.textContent = message;
+                toast.classList.add('show');
+                
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 3000);
+            }
+
+            // Initialize with a sample address
+            addressInput.value = "Enter your delivery address";
+        });
+    </script>
+</body>
+</html>

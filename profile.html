@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Foodie Haven</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style1.css') }}">
+    <style>
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes slideIn {
+            from { 
+                transform: translateX(-30px); 
+                opacity: 0; 
+            }
+            to { 
+                transform: translateX(0); 
+                opacity: 1; 
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(-45deg, #ff4757, #ff6b81, #ffa502, #ff4757);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            font-family: 'Arial', sans-serif;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('{{ url_for("static", filename="images/food-pattern.png") }}') repeat;
+            opacity: 0.1;
+            z-index: 1;
+        }
+
+        .floating-elements {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .floating-element {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .floating-element:nth-child(1) {
+            width: 100px;
+            height: 100px;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .floating-element:nth-child(2) {
+            width: 150px;
+            height: 150px;
+            top: 60%;
+            right: 10%;
+            animation-delay: 2s;
+        }
+
+        .floating-element:nth-child(3) {
+            width: 80px;
+            height: 80px;
+            bottom: 20%;
+            left: 20%;
+            animation-delay: 4s;
+        }
+
+        .profile-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            position: relative;
+            z-index: 2;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .profile-header {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            animation: slideUp 1s ease-out;
+            transition: transform 0.3s ease;
+        }
+
+        .profile-header:hover {
+            transform: translateY(-5px);
+        }
+
+        .profile-info {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .profile-avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ff4757, #ff6b81);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(255, 71, 87, 0.3);
+            animation: scaleIn 1s ease-out;
+            transition: transform 0.3s ease;
+        }
+
+        .profile-avatar:hover {
+            transform: scale(1.05);
+            animation: pulse 2s infinite;
+        }
+
+        .profile-avatar img {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid white;
+            transition: transform 0.3s ease;
+        }
+
+        .profile-avatar:hover img {
+            transform: scale(1.1);
+        }
+
+        .profile-avatar .edit-icon {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-avatar .edit-icon:hover {
+            transform: scale(1.1);
+            background: #ff4757;
+            color: white;
+        }
+
+        .profile-details {
+            flex: 1;
+        }
+
+        .profile-name {
+            font-size: 36px;
+            color: #333;
+            margin-bottom: 10px;
+            font-weight: 700;
+            background: linear-gradient(45deg, #ff4757, #ff6b81);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: slideIn 1s ease-out;
+        }
+
+        .profile-email {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 20px;
+            animation: slideIn 1s ease-out 0.2s;
+            animation-fill-mode: both;
+        }
+
+        .profile-stats {
+            display: flex;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 15px 25px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            animation: slideIn 1s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .stat-item:nth-child(1) { animation-delay: 0.3s; }
+        .stat-item:nth-child(2) { animation-delay: 0.4s; }
+        .stat-item:nth-child(3) { animation-delay: 0.5s; }
+
+        .stat-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ff4757;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .profile-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .profile-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            animation: slideUp 1s ease-out;
+            animation-fill-mode: both;
+            transition: transform 0.3s ease;
+        }
+
+        .profile-section:hover {
+            transform: translateY(-5px);
+        }
+
+        .profile-section:nth-child(1) { animation-delay: 0.2s; }
+        .profile-section:nth-child(2) { animation-delay: 0.4s; }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            color: #333;
+            font-weight: 600;
+            background: linear-gradient(45deg, #ff4757, #ff6b81);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .edit-btn {
+            background: none;
+            border: none;
+            color: #ff4757;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            padding: 8px 15px;
+            border-radius: 20px;
+            background: rgba(255, 71, 87, 0.1);
+        }
+
+        .edit-btn:hover {
+            color: #ff6b81;
+            transform: translateX(5px);
+            background: rgba(255, 71, 87, 0.2);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            animation: slideIn 1s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .form-group:nth-child(1) { animation-delay: 0.3s; }
+        .form-group:nth-child(2) { animation-delay: 0.4s; }
+        .form-group:nth-child(3) { animation-delay: 0.5s; }
+        .form-group:nth-child(4) { animation-delay: 0.6s; }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #666;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #ff4757;
+            box-shadow: 0 0 0 4px rgba(255, 71, 87, 0.15);
+            outline: none;
+            transform: translateY(-2px);
+        }
+
+        .save-btn {
+            background: linear-gradient(45deg, #ff4757, #ff6b81);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 20px;
+            animation: slideIn 1s ease-out 0.7s;
+            animation-fill-mode: both;
+        }
+
+        .save-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 71, 87, 0.3);
+        }
+
+        .order-history {
+            margin-top: 20px;
+        }
+
+        .order-item {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+            animation: slideIn 1s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .order-item:nth-child(1) { animation-delay: 0.3s; }
+        .order-item:nth-child(2) { animation-delay: 0.4s; }
+
+        .order-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .order-id {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .order-date {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .order-details {
+            color: #666;
+            font-size: 14px;
+        }
+
+        @keyframes slideUp {
+            from { 
+                transform: translateY(50px); 
+                opacity: 0; 
+            }
+            to { 
+                transform: translateY(0); 
+                opacity: 1; 
+            }
+        }
+
+        @keyframes scaleIn {
+            from { 
+                transform: scale(0.8); 
+                opacity: 0; 
+            }
+            to { 
+                transform: scale(1); 
+                opacity: 1; 
+            }
+        }
+
+        @media (max-width: 768px) {
+            .profile-info {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .profile-stats {
+                justify-content: center;
+            }
+
+            .profile-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .profile-container {
+                padding: 10px;
+            }
+
+            .profile-header {
+                padding: 20px;
+            }
+
+            .profile-avatar {
+                width: 120px;
+                height: 120px;
+            }
+
+            .profile-avatar img {
+                width: 110px;
+                height: 110px;
+            }
+
+            .profile-name {
+                font-size: 28px;
+            }
+
+            .stat-item {
+                padding: 10px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-elements">
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+    </div>
+
+    <div class="profile-container">
+        <div class="profile-header">
+            <div class="profile-info">
+                <div class="profile-avatar">
+                    <img src="{{ url_for('static', filename='images/default-avatar.png') }}" alt="Profile Picture">
+                    <div class="edit-icon">
+                        <i class="material-icons">edit</i>
+                    </div>
+                </div>
+                <div class="profile-details">
+                    <h1 class="profile-name">{% if user %}{{ user.name }}{% else %}Guest User{% endif %}</h1>
+                    <p class="profile-email">{% if user %}{{ user.email }}{% else %}guest@example.com{% endif %}</p>
+                    <div class="profile-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">12</div>
+                            <div class="stat-label">Orders</div>
+        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">4</div>
+                            <div class="stat-label">Favorites</div>
+        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">₹2,500</div>
+                            <div class="stat-label">Total Spent</div>
+            </div>
+            </div>
+            </div>
+            </div>
+        </div>
+
+        <div class="profile-content">
+            <div class="profile-section">
+                <div class="section-header">
+                    <h2 class="section-title">Personal Information</h2>
+                    <button class="edit-btn">
+                        <i class="material-icons">edit</i>
+                        Edit
+                    </button>
+                </div>
+                <form>
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" value="{% if user %}{{ user.name }}{% else %}Guest User{% endif %}" readonly>
+                    </div>
+            <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" value="{% if user %}{{ user.email }}{% else %}guest@example.com{% endif %}" readonly>
+            </div>
+            <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" value="{% if user %}{{ user.phone }}{% else %}+91 1234567890{% endif %}" readonly>
+            </div>
+            <div class="form-group">
+                        <label for="address">Delivery Address</label>
+                        <textarea id="address" rows="3" readonly>{% if user %}{{ user.address }}{% else %}No address provided{% endif %}</textarea>
+                    </div>
+                    <button type="submit" class="save-btn">
+                        <i class="material-icons">save</i>
+                        Save Changes
+                    </button>
+                </form>
+            </div>
+
+            <div class="profile-section">
+                <div class="section-header">
+                    <h2 class="section-title">Order History</h2>
+                </div>
+                <div class="order-history">
+                    <div class="order-item">
+                        <div class="order-header">
+                            <span class="order-id">Order #12345</span>
+                            <span class="order-date">12 March 2024</span>
+                        </div>
+                        <div class="order-details">
+                            <p>2x Margherita Pizza, 1x Garlic Bread</p>
+                            <p>Total: ₹450</p>
+                        </div>
+                    </div>
+                    <div class="order-item">
+                        <div class="order-header">
+                            <span class="order-id">Order #12344</span>
+                            <span class="order-date">10 March 2024</span>
+                        </div>
+                        <div class="order-details">
+                            <p>1x Chicken Biryani, 2x Butter Naan</p>
+                            <p>Total: ₹380</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,627 @@
+/* Payment Modal Animation Styles */
+#paymentModal {
+    transition: opacity 0.3s ease;
+}
+
+#paymentModal.closing {
+    animation: fadeOut 0.3s forwards;
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+/* Payment Success Animation */
+.payment-success-animation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9999; /* Highest z-index to ensure visibility */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.85); /* Semi-transparent background */
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.success-checkmark {
+    width: 120px; /* Larger size */
+    height: 120px; /* Larger size */
+    position: relative;
+    animation: scaleIn 0.5s forwards;
+    filter: drop-shadow(0 0 10px rgba(76, 175, 80, 0.5)); /* Add glow effect */
+}
+
+.success-checkmark .check-icon {
+    width: 120px; /* Larger size */
+    height: 120px; /* Larger size */
+    position: relative;
+    border-radius: 50%;
+    box-sizing: content-box;
+    border: 6px solid #4CAF50; /* Thicker border */
+}
+
+.success-checkmark .check-icon::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #4CAF50;
+    animation: pulseGlow 2s infinite;
+}
+
+.success-checkmark .check-icon::after {
+    content: '';
+    box-sizing: content-box;
+    position: absolute;
+    left: 30px;
+    top: 45px;
+    width: 25px;
+    height: 15px;
+    transform: rotate(45deg);
+    border-right: 4px solid white;
+    border-bottom: 4px solid white;
+    animation: checkmarkDraw 0.3s forwards 0.2s;
+    opacity: 0;
+}
+
+@keyframes checkmarkDraw {
+    0% { width: 0; height: 0; opacity: 0; }
+    100% { width: 25px; height: 15px; opacity: 1; }
+}
+
+@keyframes pulseGlow {
+    0% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.4); }
+    70% { box-shadow: 0 0 0 15px rgba(76, 175, 80, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0); }
+}
+
+@keyframes scaleIn {
+    0% { transform: scale(0); opacity: 0; }
+    50% { transform: scale(1.2); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* Responsive styles for payment modal */
+@media (max-width: 992px) {
+    .payment-content {
+        flex-direction: column;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+    
+    .payment-body {
+        flex-direction: column;
+    }
+    
+    .payment-summary-sidebar {
+        width: 100%;
+        border-left: none;
+        border-top: 1px solid #eee;
+    }
+}
+
+@media (max-width: 768px) {
+    .payment-step {
+        padding: 1.5rem;
+    }
+    
+    .form-row {
+        flex-direction: column;
+        gap: 1.2rem;
+    }
+    
+    .wallet-options {
+        flex-direction: column;
+    }
+    
+    .confirmation-details {
+        gap: 0.8rem;
+    }
+    
+    .confirmation-detail {
+        padding: 0.8rem;
+    }
+    
+    .confirmation-actions {
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+    
+    .confirmation-actions button {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .payment-progress {
+        padding: 1rem 0.5rem;
+    }
+    
+    .step-number {
+        width: 30px;
+        height: 30px;
+        font-size: 0.9rem;
+    }
+    
+    .step-label {
+        font-size: 0.8rem;
+    }
+    
+    .progress-line {
+        margin: 0 0.5rem;
+    }
+    
+    .payment-step h3 {
+        font-size: 1.2rem;
+    }
+    
+    .payment-method-tabs {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .payment-tab {
+        width: 100%;
+        text-align: center;
+    }
+    
+    .card-icons {
+        justify-content: center;
+    }
+}
+
+/* Payment Success Modal Styles */
+.payment-success {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.payment-success.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.success-content {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    max-width: 450px;
+    width: 90%;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+    animation: scaleIn 0.5s forwards;
+}
+
+.payment-success.active .success-content {
+    transform: scale(1);
+}
+
+.success-icon {
+    width: 80px;
+    height: 80px;
+    background: var(--success-color-light);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 1.5rem;
+}
+
+.success-icon i {
+    font-size: 40px;
+    color: var(--success-color);
+    animation: checkmark 0.5s ease-in-out 0.3s both;
+}
+
+.success-content h2 {
+    color: var(--success-color);
+    margin-bottom: 0.5rem;
+    font-size: 1.8rem;
+}
+
+.success-content p {
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+.success-details {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.success-detail {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px dashed #e0e0e0;
+}
+
+.success-detail:last-child {
+    border-bottom: none;
+}
+
+.success-detail span:first-child {
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.success-detail span:last-child {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+/* Bills Section Styles */
+.bills-section {
+    position: fixed;
+    top: 0;
+    right: -400px;
+    width: 400px;
+    height: 100%;
+    background: white;
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+    z-index: 1500;
+    transition: right 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.bills-section.active {
+    right: 0;
+}
+
+.bills-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #eee;
+    background: var(--gradient-primary);
+    color: white;
+}
+
+.bills-header h2 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.close-bills {
+    background: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background 0.2s ease;
+}
+
+.close-bills:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.bills-filters {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #eee;
+    background: #f8f9fa;
+}
+
+.filter-buttons {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+    max-width: 80%;
+}
+
+.filter-btn {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.filter-btn i {
+    font-size: 1.1rem;
+}
+
+.filter-btn.active {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.clear-bills {
+    background: transparent;
+    border: none;
+    color: #f44336;
+    cursor: pointer;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.5rem;
+    border-radius: 4px;
+    transition: background 0.2s ease;
+}
+
+.clear-bills:hover {
+    background: rgba(244, 67, 54, 0.1);
+}
+
+.bills-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+}
+
+.empty-bills {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: #aaa;
+    text-align: center;
+    padding: 2rem;
+}
+
+.empty-bills i {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    color: #ddd;
+}
+
+.empty-bills p {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.empty-bills span {
+    font-size: 0.9rem;
+}
+
+.bill-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    margin-bottom: 1rem;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    animation: fadeIn 0.3s ease;
+}
+
+.bill-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.bill-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-bottom: 1px solid #eee;
+}
+
+.bill-id, .bill-date {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.bill-id i, .bill-date i {
+    color: var(--primary-color);
+}
+
+.bill-id span {
+    font-weight: 600;
+}
+
+.bill-restaurant, .bill-delivery-info {
+    padding: 0.8rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.bill-restaurant i, .delivery-type i, .delivery-address i {
+    color: var(--primary-color);
+    font-size: 1.1rem;
+}
+
+.bill-delivery-info {
+    display: flex;
+    justify-content: space-between;
+}
+
+.delivery-type, .delivery-address {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.bill-items {
+    padding: 1rem;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.bill-items-header {
+    font-weight: 600;
+    margin-bottom: 0.8rem;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.bill-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.bill-item-name {
+    font-weight: 500;
+}
+
+.bill-item-quantity {
+    color: var(--text-secondary);
+    font-weight: normal;
+}
+
+.bill-item-price {
+    font-weight: 600;
+}
+
+.bill-total {
+    padding: 1rem;
+    background: #f8f9fa;
+    border-bottom: 1px solid #eee;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.summary-row.total {
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px dashed #ddd;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.bill-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+}
+
+.payment-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.payment-info i {
+    color: var(--primary-color);
+}
+
+.payment-status {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.9rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+}
+
+.payment-status.success {
+    background: rgba(76, 175, 80, 0.1);
+    color: #4CAF50;
+}
+
+.payment-status.failed {
+    background: rgba(244, 67, 54, 0.1);
+    color: #F44336;
+}
+
+.payment-status i {
+    font-size: 1rem;
+}
+
+/* Responsive styles for bills section */
+@media (max-width: 768px) {
+    .bills-section {
+        width: 100%;
+        right: -100%;
+    }
+    
+    .bill-delivery-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .delivery-type, .delivery-address {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .bills-filters {
+        flex-direction: column;
+        gap: 0.8rem;
+        align-items: flex-start;
+    }
+    
+    .filter-buttons {
+        max-width: 100%;
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .filter-btn {
+        flex: 1;
+        justify-content: center;
+        padding: 0.5rem;
+        font-size: 0.8rem;
+    }
+    
+    .filter-btn i {
+        font-size: 1rem;
+    }
+    
+    .clear-bills {
+        width: 100%;
+        justify-content: center;
+    }
+}
